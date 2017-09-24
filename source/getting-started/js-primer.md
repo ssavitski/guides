@@ -85,7 +85,7 @@ console.log(name) // ReferenceError: name is not defined
 
 if (person) {
   console.log(name) // ReferenceError: name is not defined
-  
+
   let name = 'Gob Bluth'; // "Gob Bluth"
 } else {
   console.log(name) // ReferenceError: name is not defined
@@ -154,3 +154,84 @@ For further reference you can consult Developer Network articles:
 * [`var`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/var)
 * [`const`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/const)
 * [`let`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/let).
+
+For further reference on property initializer and concise method syntax see: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Object_initializer
+
+## Modules
+
+Prior to ES6 JavaScript shared one global scope. ES6 modules allow scope to be broken up and managed. With modules variables do not exist above the top-level scope of the module, and any variable you wish to make available outside a module must be exported. Similarly any variable you wish to include in a module that is external to that module must be imported.
+
+### Export
+
+Portions of code that you wish to share can be exported using the `export` keyword. You can specify `export` before any piece of code that should be made available outside of the module. So exporting could be applied to a variable, a function or a class, for example:
+```javascript
+// export a variable
+export let name = "Yehuda Katz";
+
+// or export a function
+export function sayName(name) {
+  console.log(`My name is ${name}`);
+}
+
+// or export a class
+export class Person {
+ // some code
+}
+```
+Anything inside of a module that is not exported is private to that module.
+
+### Import
+
+The `import` keyword allows bindings that are exported from other modules to be included in the current module, for example:
+```javascript
+import { person } from "./person.js";
+```
+You can specify one or more identifiers in the curly braces after the `import` keyword. The path following the `from` keyword indicates the path to the file where the module exists that you wish to import from. Note that identifiers are treated like `const` declarations and thus they cannot be later reassigned once imported. You can however reassign identifiers on importation/exportation:
+```javascript
+// person.js
+class Person {
+ // some code
+}
+export { Person as humanoid };
+```
+```javascript
+import { humanoid as sapien } from "./person.js";
+```
+Entire modules can be imported using namespace importing. All bindings from the namespace imported module are available as properties on the identified namespace:
+```javascript
+import * as person from "./person.js"; // all bindings in person.js available as props on person
+```
+### Default
+
+Modules can also specify a default value for `import` and `export`. When default is applied to an exported binding that binding is considered the main export is therefore simpler to import:
+```javascript
+// person.js
+export default class Person {
+ // some code
+}
+```
+```javascript
+import Person from "./person.js"; // note the lack of curly braces around the default identifier
+```
+Default values can also be imported with other values:
+```javascript
+// person.js
+export let name = "Yehuda Katz";
+export default class Person {
+ // some code
+}
+```
+```javascript
+import Person, {name} from "./person.js"; // note the lack of curly braces around the default identifier, but curly braces around the non-default identifier
+```
+Or, default values can be reassigned on importation just like non-default values:
+```javascript
+// person.js
+export default class Person {
+ // some code
+}
+```
+```javascript
+import {Person as humanoid} from "./person.js"; // note the curly braces around the default identifier because of reassignment
+```
+For further reference on  [`import`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/import) and [`export`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/export) of modules.
