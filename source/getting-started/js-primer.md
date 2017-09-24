@@ -178,7 +178,14 @@ export class Person {
  // some code
 }
 ```
-Anything inside of a module that is not exported is private to that module.
+Anything inside of a module that is not exported is private to that module. You may also specify your export after definition of a value you wish to export:
+```javascript
+// define a value
+let name = "Yehuda Katz";
+
+// export it later
+export name;
+```
 
 ### Import
 
