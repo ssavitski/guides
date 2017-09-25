@@ -161,9 +161,12 @@ For further reference on property initializer and concise method syntax see: htt
 
 Prior to ES6 JavaScript shared one global scope. ES6 modules allow scope to be broken up and managed. With modules variables do not exist above the top-level scope of the module, and any variable you wish to make available outside a module must be exported. Similarly any variable you wish to include in a module that is external to that module must be imported.
 
+As you become familiar Ember you will notice that many files included in an Ember application use the ES6 `import` and `export` keywords to expose functionality of modules across the application. These import and export statements are automatically generated for you if you use `ember-cli` to create your Ember application or files. Most Ember applications do not need alter these automatically generated import and export statements, but it can be helpful to have a basic understanding of how `import` and `export` work in ES6. Additionally, ES6 importing and exporting is necessary if you want to include additional functionality through the use of Ember classes, such as the `mixin` class.
+
 ### Export
 
-Portions of code that you wish to share can be exported using the `export` keyword. You can specify `export` before any piece of code that should be made available outside of the module. So exporting could be applied to a variable, a function or a class, for example:
+Portions of code that you wish to share can be exported using the `export` keyword. You can specify `export` before any piece of code that should be made available outside of the module. So exporting could be applied to any value within a module. A variable, a function or an Ember class, module or namespace, are all exportable. For example:
+
 ```javascript
 // export a variable
 export let name = "Yehuda Katz";
@@ -173,12 +176,13 @@ export function sayName(name) {
   console.log(`My name is ${name}`);
 }
 
-// or export a class
-export class Person {
- // some code
-}
+// or export an ember component
+export Ember.Component.extend({
+});
 ```
-Anything inside of a module that is not exported is private to that module. You may also specify your export after definition of a value you wish to export:
+
+If a value has been assigned a binding, exporting does not have to happen in the same line as defining a value, you may specify your export later:
+
 ```javascript
 // define a value
 let name = "Yehuda Katz";
@@ -187,58 +191,50 @@ let name = "Yehuda Katz";
 export name;
 ```
 
+Remember that anything inside of a module that is not exported is private to that module and cannot be accessed from other modules.
+
 ### Import
 
 The `import` keyword allows bindings that are exported from other modules to be included in the current module, for example:
+
 ```javascript
-import { person } from "./person.js";
+import { Ember } from "ember";
 ```
-You can specify one or more identifiers in the curly braces after the `import` keyword. The path following the `from` keyword indicates the path to the file where the module exists that you wish to import from. Note that identifiers are treated like `const` declarations and thus they cannot be later reassigned once imported. You can however reassign identifiers on importation/exportation:
+
+One or more identifiers can be specified in the curly braces after the `import` keyword. The module following the `from` keyword indicates where you wish to import from. Note that identifiers are treated like `const` declarations and thus they cannot be later reassigned once imported. You can, however, reassign identifiers on importation/exportation:
+
 ```javascript
-// person.js
-class Person {
- // some code
-}
-export { Person as humanoid };
+export { Ember as tomster };
+
+// and then ...
+import { tomster as zoey } from "ember";
 ```
-```javascript
-import { humanoid as sapien } from "./person.js";
-```
-Entire modules can be imported using namespace importing. All bindings from the namespace imported module are available as properties on the identified namespace:
-```javascript
-import * as person from "./person.js"; // all bindings in person.js available as props on person
-```
+
 ### Default
 
-Modules can also specify a default value for `import` and `export`. When default is applied to an exported binding that binding is considered the main export is therefore simpler to import:
+Modules can also specify a default value for `import` and `export`. When default is applied to an exported binding that binding is considered the main export and is therefore simpler to import:
+
 ```javascript
-// person.js
-export default class Person {
- // some code
-}
+export default Ember; // note the default keyword
+
+import Ember from "ember"; // note the lack of curly braces around the default identifier
 ```
+
+Default values can also be imported with other non-default values:
+
 ```javascript
-import Person from "./person.js"; // note the lack of curly braces around the default identifier
-```
-Default values can also be imported with other values:
-```javascript
-// person.js
 export let name = "Yehuda Katz";
-export default class Person {
- // some code
-}
+export default Ember;
+
+import Ember, {name} from "ember"; // note the lack of curly braces around the default identifier, but curly braces around the non-default identifier
 ```
-```javascript
-import Person, {name} from "./person.js"; // note the lack of curly braces around the default identifier, but curly braces around the non-default identifier
-```
+
 Or, default values can be reassigned on importation just like non-default values:
+
 ```javascript
-// person.js
-export default class Person {
- // some code
-}
+export default Ember;
+
+import {Ember as tomster} from "ember"; // note the curly braces around the default identifier because of reassignment
 ```
-```javascript
-import {Person as humanoid} from "./person.js"; // note the curly braces around the default identifier because of reassignment
-```
+
 For further reference on  [`import`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/import) and [`export`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/export) of modules.
