@@ -76,87 +76,80 @@ There are two major differences between `var` and both `const` and `let`.
 `const` and `let` are both block-level declarations, and they are *not* hoisted.
 
 Because of this they are not accessible outside of the given block scope (meaning in a `function` or in `{}`) they are declared in.
-You can also not access them before they are declared, or you will get a `foo is not defined` error.
+You can also not access them before they are declared, or you will get a [`ReferenceError`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/ReferenceError).
 
 ```javascript
 console.log(name) // => name is not defined
 
 if (person) {
   console.log(name) // => name is not defined
-  
+
   let name = 'Gob Bluth'; // => Gob Bluth
 } else {
   console.log(name) // => name is not defined
 }
 ```
 
-`const` declarations are not hoisted either, but they differ from `let` declarations in that they are treated as constants, meaning their values cannot changed once they are set. As such, `const` declarations must be initialized where declared.
+`const` declaration have an additional restriction, they are *constant references*,
+they always refer to the same thing.
+To use a `const` declaration you have to specify the value it refers,
+and you cannot change what the declaration refers to:
 
 ```javascript
-const firstName; // invalid, no initialization
-const firstName = 'Gob'; // valid
-firstName = 'George Michael'; // invalid, no re-assignment
+const firstName; // => Uncaught SyntaxError: Missing initializer in const declaration
+const firstName = 'Gob';
+firstName = 'George Michael'; // => Uncaught SyntaxError: Identifier 'firstName' has already been declared
 ```
 
-Both `const` and `let` declarations cannot be accessed until after their declaration,
-and any attempt to access such bindings before their declarations occurs in what is known in the community as the temporal dead zone.
+Note that `const` does not mean that the value it refers to cannot change.
+If you have an array or an object, you can change their properties:
 
-#### Deeper Dive, Global Variables
+```javascript
+const myArray = [];
+const myObject = { name: "Tom Dale" };
 
-Additionally, when `var` is used in the global scope a new global variable is created,
-which is a property on the global object (for example, the window object in a browser).
+myArray.push(1);
+myObject.name = "Leah Silber";
 
-For `let` or `const`, a new variable is created, but no property on the global object is generated.
+console.log(myArray); // => [1]
+console.log(myObject); // => {name: "Leah Silber"}
+```
 
-The result is that you cannot overwrite a global variable using `let` or `const` declarations,
-only shadowing is possible.
+### `for` loops
 
-#### Deeper Dive, Loop behavior
+Something that might be confusing is the behaviour of `let` in `for` loops.
 
-Furthermore, `let` corrects some problematic behavior of `var` in loops.
+As we saw before, `let` declarations are scoped to the block they belong to.
+In `for` loops, any variable declared in the for syntax belongs to the loop's block.
 
-First, `let` behaves closer to expectations by restricting the accessibility of the counter variable to the block-level of the loop, while `var` does not.
+Let's look at some code to see what this looks like.
+If you use `var`, this happens:
 
 ```javascript
 for (var i = 0; i < 3; i++) {
-  // some code here using i
-}
-// i still accessible here
-```
-
-Because loop variables are accessible from outside the scope of a loop,
-when creating a function inside of a loop, the counter variable is shared across each iteration,
-potentially causing unexpected behavior.
-
-```javascript
-var someArray = [];
-for (var i = 0; i < 3; i++) {
-  someArray.push(function(){
-    console.log(i);
-  });
+  console.log(i) // => wil print 0, 1, 2, and 3 in succession
 }
 
-someArray.forEach(function(item) {
-  item(); // logs the number "3" three times, but expected the log to be 0, then 1, then 2
-});
+console.log(i) // => 3
 ```
 
-While an immediately invoked function expression (IIFE) could be used to correct for this unexpected behavior,
-the use of `let` declaration for the counter variable makes this unnecessary and arguably more cleanly solves the issue creating a new counter variable on each iteration through the loop.
+But if you use `let`, this happens instead:
 
 ```javascript
-var someArray = [];
 for (let i = 0; i < 3; i++) {
-  someArray.push(function(){
-    console.log(i);
-  });
+  console.log(i) // => wil print 0, 1, 2, and 3 in succession
 }
 
-someArray.forEach(function(item) {
-  item(); // logs the numbers 0, then 1, then 2, as expected
-});
+console.log(i) // => i is not defined
 ```
 
-#### More Resources
+Using `let` will avoid accidentally leaking and changing the `i` variable from outside of the `for` block.
 
-For further reference you can check the MDN references for [`var`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/var), [`const`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/const), and [`let`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/let). 
+### Resources
+
+For further reference you can consult Developer Network articles:
+
+* [`var`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/var)
+* [`const`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/const)
+* [`let`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/let).
+>>>>>>> a449547e... adds variable declarations section of primer
