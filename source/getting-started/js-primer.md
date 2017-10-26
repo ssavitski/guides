@@ -175,7 +175,7 @@ export function sayName(name) {
 }
 
 // or export an ember component
-export Ember.Component.extend({
+export default Component.extend({
 });
 ```
 
@@ -196,43 +196,43 @@ Remember that anything inside of a module that is not exported is private to tha
 The `import` keyword allows bindings that are exported from other modules to be included in the current module, for example:
 
 ```javascript
-import { Ember } from "ember";
+import Component from '@ember/component';
 ```
 
-One or more identifiers can be specified in the curly braces after the `import` keyword. The module following the `from` keyword indicates where you wish to import from. Note that identifiers are treated like `const` declarations and thus they cannot be later reassigned once imported. You can, however, reassign identifiers on importation/exportation:
+One or more identifiers can be specified after the `import` keyword. The module following the `from` keyword indicates where you wish to import from. Note that identifiers are treated like `const` declarations and thus they cannot be later reassigned once imported. You can, however, reassign identifiers on importation/exportation:
 
 ```javascript
-export { Ember as tomster };
+export { Component as tomster };
 
 // and then ...
-import { tomster as zoey } from "ember";
+import { tomster as zoey } from "@ember/component";
 ```
 
 ### Default
 
-Modules can also specify a default value for `import` and `export`. When default is applied to an exported binding that binding is considered the main export and is therefore simpler to import:
+Modules can also specify a default value for `import` and `export`. When default is applied to an exported binding that binding is considered the main export and is therefore simpler to import. Using default is typically how imports are constructed in Ember:
 
 ```javascript
-export default Ember; // note the default keyword
+export default Component; // note the default keyword
 
-import Ember from "ember"; // note the lack of curly braces around the default identifier
+import Component from '@ember/component'; // note the lack of curly braces around the default identifier
 ```
 
 Default values can also be imported with other non-default values:
 
 ```javascript
-export let name = "Yehuda Katz";
-export default Ember;
+export let name = "Yehuda";
+export default Component;
 
-import Ember, {name} from "ember"; // note the lack of curly braces around the default identifier, but curly braces around the non-default identifier
+import Component, { name } from "@ember/component"; // note the lack of curly braces around the default identifier, but curly braces around the non-default identifier
 ```
 
 Or, default values can be reassigned on importation just like non-default values:
 
 ```javascript
-export default Ember;
+export default Component;
 
-import {Ember as tomster} from "ember"; // note the curly braces around the default identifier because of reassignment
+import { Component as tomster } from "@ember/component"; // note the curly braces around the default identifier because of reassignment
 ```
 
 For further reference on  [`import`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/import) and [`export`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/export) of modules.
