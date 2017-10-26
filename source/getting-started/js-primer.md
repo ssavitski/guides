@@ -159,9 +159,7 @@ For further reference on property initializer and concise method syntax see: htt
 
 ## Modules
 
-Prior to ES6 JavaScript shared one global scope. ES6 modules allow scope to be broken up and managed. With modules variables do not exist above the top-level scope of the module, and any variable you wish to make available outside a module must be exported. Similarly any variable you wish to include in a module that is external to that module must be imported.
-
-As you become familiar Ember you will notice that many files included in an Ember application use the ES6 `import` and `export` keywords to expose functionality of modules across the application. These import and export statements are automatically generated for you if you use `ember-cli` to create your Ember application or files. Most Ember applications do not need alter these automatically generated import and export statements, but it can be helpful to have a basic understanding of how `import` and `export` work in ES6. Additionally, ES6 importing and exporting is necessary if you want to include additional functionality through the use of Ember classes, such as the `mixin` class.
+An Ember application's code is organized as modules, which means that the `import` and `export` keywords are used to require and expose functionalities in other parts your application. Files generated with the Ember CLI are already modules so conversion to modules is not typically necessary. That said, it is still helpful to have a basic understanding of how `import` and `export` work in ES6 so let's take a look at them.
 
 ### Export
 
