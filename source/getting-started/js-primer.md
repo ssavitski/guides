@@ -155,8 +155,6 @@ For further reference you can consult Developer Network articles:
 * [`const`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/const)
 * [`let`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/let).
 
-For further reference on property initializer and concise method syntax see: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Object_initializer
-
 ## Modules
 
 An Ember application's code is organized as modules, which means that the `import` and `export` keywords are used to require and expose functionalities in other parts your application. Files generated with the Ember CLI are already modules so conversion to modules is not typically necessary. That said, it is still helpful to have a basic understanding of how `import` and `export` work in ES6 so let's take a look at them.
